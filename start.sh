@@ -10,7 +10,7 @@ SUDO_USER="foo"
 
 apt install curl htop vim mc
 
-sudo apt update && sudo apt upgrade 
+apt update && apt upgrade 
 
 usermod -aG sudo $SUDO_USER
 
@@ -95,5 +95,3 @@ echo "#!/bin/bash
 
  # Add it to cron:
  # 00 04 * * * /bin/sh  /root/backup.sh
-
-
