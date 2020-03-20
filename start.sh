@@ -15,7 +15,7 @@ apt update && apt upgrade
 usermod -aG sudo $SUDO_USER
 
 mkdir $HOME/.ssh
-echo $PUBLIC_KEY > $HOME/.ssh/authorized_keys
+#echo $PUBLIC_KEY > $HOME/.ssh/authorized_keys
 chmod go-w $HOME $HOME/.ssh
 chmod 600 $HOME/.ssh/authorized_keys
 chown $WHOAMI $HOME/.ssh/authorized_keys
@@ -32,8 +32,8 @@ alias ....='cd ../../../'" >> $HOME/.bashrc
 #Install 2FA
 apt install libpam-google-authenticator && google-authenticator
 echo "auth required pam_google_authenticator.so" >> /etc/pam.d/sshd
-sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
-#sed -i 's/UsePAM no/UsePAM yes/' /etc/ssh/sshd_config
+#sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/UsePAM no/UsePAM yes/' /etc/ssh/sshd_config
 sed -i 's/\(ChallengeResponseAuthentication\) yes/\1 no/g' /etc/ssh/sshd_config
 systemctl restart sshd.service
 
@@ -48,7 +48,7 @@ mkdir /backup/
 
 groupadd without-otp
 echo "auth [success=done default=ignore] pam_succeed_if.so user ingroup without-otp" >> /etc/pam.d/sshd 
-usermod -a -G without-otp $UZYTKOWNIK_SUDO
+usermod -a -G without-otp $SUDO_USER
 service sshd restart
 
 #curl https://rclone.org/install.sh | sudo bash
