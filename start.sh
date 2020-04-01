@@ -6,6 +6,8 @@
 
 SUDO_USER="foo"
 
+SOME_USER="bar"
+
 #PUBLIC_KEY="ssh-rsa AAAA ... rsa-key-foo"
 
 apt install curl htop vim mc
@@ -41,11 +43,16 @@ source $HOME/.bashrc
 
 #Install 2FA
 apt install libpam-google-authenticator && google-authenticator
+echo "auth [success=done default=ignore] pam_succeed_if.so user ingroup without-otp" >> /etc/pam.d/sshd 
 echo "auth requigroured pam_google_authenticator.so" >> /etc/pam.d/sshd
-#sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/' /etc/ssh/sshd_config
+# DO NOT CHANGE THE SEQUENCE OF ABOVE LINES
 sed -i 's/UsePAM no/UsePAM yes/' /etc/ssh/sshd_config
 sed -i 's/\(ChallengeResponseAuthentication\) yes/\1 no/g' /etc/ssh/sshd_config
 systemctl restart sshd.service
+
+groupadd without-otp
+usermod -a -G without-otp $SOME_USER
+service sshd restart
 
 #Install ffsend
 cd $HOME
@@ -56,42 +63,47 @@ mv ./ffsend /usr/local/bin/
 
 mkdir /backup/
 
-groupadd without-otp
-echo "auth [success=done default=ignore] pam_succeed_if.so user ingroup without-otp" >> /etc/pam.d/sshd 
-usermod -a -G without-otp $SUDO_USER
-service sshd restart
-
 #curl https://rclone.org/install.sh | sudo bash
 #rclone config
 
 echo "#!/bin/bash
- rm -rf /backup/starszy
- mv /backup/nowszy/* /backup/starszy/
- mkdir /backup/nowszy
- mkdir -p /backup/from_root
- cp -aR -- .config /root/backup/from_root
- cp -aR -- /root/.[bglmnpsvw]* /backup/from_root/
- TIME=$(date +"%m-%d-%Y")
- FILENAME=backup-root-$TIME.tar.gz
- SRCDIR=/backup/from_root/
- DESDIR=/backup/nowszy/
- tar -cvpzf $DESDIR/$FILENAME $SRCDIR
- FILENAME=backup-etc-$TIME.tar.gz
- SRCDIR=/etc/
- DESDIR=/backup/nowszy/
- tar -cvpzf $DESDIR/$FILENAME $SRCDIR
- FILENAME=backup-var-www--$TIME.tar.gz
- SRCDIR=/var/www/
- DESDIR=/backup/nowszy/
- tar -cvpzf $DESDIR/$FILENAME $SRCDIR
- FILENAME=backup-var-log-$TIME.tar.gz
- SRCDIR=/var/log/
- DESDIR=/backup/nowszy/
- tar -cvpzf $DESDIR/$FILENAME $SRCDIR
- rm -rf /backup/from_root/.[^.]*
- #rclone copy /backup/nowszy/ mega:server  --buffer-size 0M" > /root/backup.sh
 
- chmod +x backup.sh
+rm -rf /backup/old
+mv /backup/new/* /backup/old/
+mkdir /backup/new
 
- # Add it to cron:
- # 00 04 * * * /bin/sh  /root/backup.sh
+mkdir -p /backup/from_root
+
+cp -aR -- .config /root/backup/from_root
+cp -aR -- /root/.[bglmnpsvw]* /backup/from_root/
+
+TIME=$(date +"%m-%d-%Y")
+
+FILENAME=backup-root-$TIME.tar.gz
+SRCDIR=/backup/from_root/
+DESDIR=/backup/new/
+tar -cvpzf $DESDIR/$FILENAME $SRCDIR
+
+FILENAME=backup-etc-$TIME.tar.gz
+SRCDIR=/etc/
+DESDIR=/backup/new/
+tar -cvpzf $DESDIR/$FILENAME $SRCDIR
+
+FILENAME=backup-var-www--$TIME.tar.gz
+SRCDIR=/var/www/
+DESDIR=/backup/new/
+tar -cvpzf $DESDIR/$FILENAME $SRCDIR
+
+FILENAME=backup-var-log-$TIME.tar.gz
+SRCDIR=/var/log/
+DESDIR=/backup/new/
+tar -cvpzf $DESDIR/$FILENAME $SRCDIR
+
+rm -rf /backup/from_root/.[^.]*
+
+#rclone copy /backup/new/ mega:server  --buffer-size 0M" > /root/backup.sh
+
+chmod +x backup.sh
+
+# Add it to cron:
+# 00 04 * * * /bin/sh  /root/backup.sh
