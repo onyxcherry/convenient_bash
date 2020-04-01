@@ -68,11 +68,10 @@ mkdir /backup/
 
 echo "#!/bin/bash
 
-rm -rf /backup/old
-mv /backup/new/* /backup/old/
-mkdir /backup/new
-
 mkdir -p /backup/from_root
+
+rm /backup/starszy/*
+mv /backup/nowszy/* /backup/starszy/
 
 cp -aR -- .config /root/backup/from_root
 cp -aR -- /root/.[bglmnpsvw]* /backup/from_root/
