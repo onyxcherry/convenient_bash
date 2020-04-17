@@ -1,0 +1,23 @@
+#!/bin/bash
+
+DATE=$(date +%Y)/$(date +%m)
+POST_NAME=''
+OPTARG=''
+OPTIND=''
+
+print_error() {
+  printf "Something bad, bro..."
+}
+
+
+while getopts 'n:' flag; do
+
+  case "${flag}" in
+	
+	n) POST_NAME=${OPTARG} ;;
+	*) print_error
+	   exit 1 ;;
+  esac
+done 
+
+hugo new posts/${DATE}/${POST_NAME}
