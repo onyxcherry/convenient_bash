@@ -1,0 +1,31 @@
+#!/bin/bash
+
+DIR=''
+WH=''
+DATE=$(date +%Y)/$(date +%m)
+OPTIND=''
+#OPTARG=''
+
+print_help() {
+  printf "Help module: ..."
+}
+
+while getopts 'aiopr' flag; do
+
+  case "${flag}" in
+  
+    a) DIR='arduino.onyxcherry.pl' ;;
+    i) WH='static/img' ;;
+    p) WH='content/posts' ;;
+    o) DIR='onyxcherry.pl' ;;
+    r) DIR='robot.onyxcherry.pl' ;;
+    *) print_help
+       exit 1 ;;
+  esac
+done
+
+if [[ -n $WH ]]; then
+	cd /home/tomasz/${DIR}/${WH}/${DATE}/
+elif [[ -z $WH ]]; then
+	cd /home/tomasz/${DIR}/
+fi
