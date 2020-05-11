@@ -1,0 +1,38 @@
+#!/bin/bash
+
+DIR=''
+WH=''
+DATE=$(date +%Y)/$(date +%m)
+OPTIND=''
+OPTARG=''
+
+print_help() {
+  printf "Help module: ..."
+}
+
+while getopts 'aion:pr' flag; do
+
+  case "${flag}" in
+  
+    a) DIR='arduino.onyxcherry.pl' ;;
+    i) WH='static/img' ;;
+	n) POST_NAME=${OPTARG} ;;
+    p) WH='content/posts' ;;
+    o) DIR='onyxcherry.pl' ;;
+    r) DIR='robot.onyxcherry.pl' ;;
+    *) print_help
+       exit 1 ;;
+  esac
+done
+
+if [[ -n $POST_NAME ]]; then
+	hugo new posts/${DATE}/${POST_NAME}
+fi
+
+# dodać moduły sprawdzające - na wypadek pomyłki
+
+if [[ -n $WH ]]; then
+	cd /home/tomasz/${DIR}/${WH}/${DATE}/
+elif [[ -z $WH ]]; then
+	cd /home/tomasz/${DIR}/
+fi
