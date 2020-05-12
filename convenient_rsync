@@ -1,0 +1,154 @@
+#!/bin/bash
+
+COLOR_RED="\033[0;31m"
+COLOR_RED_LIGHT="\033[1;31m"
+
+COLOR_GREEN="\033[0;32m"
+COLOR_GREEN_LIGHT="\033[1;32m"
+
+COLOR_ORANGE="\033[0;33m"
+COLOR_YELLOW="\033[1;33m"
+
+COLOR_BLUE="\033[0;34m"
+COLOR_BLUE_LIGHT="\033[1;34m"
+
+COLOR_PURPLE="\033[0;35m"
+COLOR_PURPLE_LIGHT="\033[1;35m"
+
+COLOR_CYAN="\033[0;36m"
+COLOR_CYAN_LIGHT="\033[1;36m"
+
+COLOR_GRAY="\033[1;30m"
+COLOR_GRAY_LIGHT="\033[0;37m"
+
+COLOR_BLACK="\033[0;30m"
+COLOR_WHITE="\033[1;37m"
+
+COLOR_END="\033[0m"
+
+SRC=$(echo ${PWD} | cut -d "/" -f 4)
+
+ARGSCOUNT=$#
+
+PORT=''
+SERVER=''
+SERVER_LETTER=''
+NICKNAME=''
+PATH_BASED_ON_NICKNAME=''
+HELP=''
+
+DOWNLOAD=''
+UPLOAD=''
+
+FILENAME=''
+
+OPTARG=''
+OPTIND=''
+
+print_error() {
+  printf "Something bad, bro..."
+}
+
+print_help() {
+  printf "Help module, TO-DO..."
+}
+
+
+while getopts 'd:f:hl:u:' flag; do
+
+  case "${flag}" in
+	
+	d) DOWNLOAD=${OPTARG} ;;
+	f) FILENAME=${OPTARG} ;;
+	h) print_help 
+	   HELP='true' ;;
+	l) SERVER_LETTER=${OPTARG} ;;
+	u) UPLOAD=${OPTARG} ;;
+	*) print_error
+	   exit 1 ;;
+  esac
+done 
+
+re='^\s?[a-zA-Z0-9]+'
+
+! [[ -n $DOWNLOAD ]]; DOWNLOAD_TEST=$?
+! [[ -n $UPLOAD ]]; UPLOAD_TEST=$?
+
+! [[ $DOWNLOAD =~ $re ]]; REGEX_DOWNLOAD_TEST=$?
+! [[ $UPLOAD =~ $re ]]; REGEX_UPLOAD_TEST=$?
+
+if [[ $DOWNLOAD_TEST -ne $UPLOAD_TEST ]] && [[ $REGEX_DOWNLOAD_TEST -ne $REGEX_UPLOAD_TEST ]] && [[ -n $FILENAME ]] && [[ $FILENAME =~ $re ]] && [[ -z $HELP ]]; then
+
+	#echo "Spełnione"
+	NICKNAME="$DOWNLOAD$UPLOAD"
+elif [[ $ARGSCOUNT == 0 ]]; then
+	NICKNAME="$DOWNLOAD$UPLOAD"
+	
+	if [[ "$SRC" == "robot.onyxcherry.pl" || "$SRC" == "arduino.onyxcherry.pl" ]]; then
+			PORT='10333'
+			SERVER='srv04'
+		elif [[ "$SRC" == "onyxcherry.pl" ]]; then
+			PORT='10261'
+			SERVER='srv03'
+		else
+			echo -e "${COLOR_RED}Nie obsługuję tej (sub)domeny${COLOR_END}"
+		exit 1;
+	fi
+	#rsync 
+	echo "-avh --progress --delete-excluded -e \"ssh -p ${PORT} -i /root/.ssh/${NICKNAME}@${SERVER}\" root@${SERVER}.mikr.us:/var/www/html/${SRC}/ /home/tomasz/${SRC}/public"
+else
+	echo -e "${COLOR_RED}Długi warunek niespełniony!${COLOR_END}"
+	exit 1;
+fi
+
+
+
+if [[ "$NICKNAME" == "tomek" ]]; then
+        PORT='10261'
+        SERVER='srv03'
+		PATH_BASED_ON_NICKNAME='/home/tomek/'
+elif [[ "$NICKNAME" == "cherry" ]]; then
+        PORT='10333'
+        SERVER='srv04'
+		PATH_BASED_ON_NICKNAME='/home/cherry/'
+elif [[ "$NICKNAME" == "root" ]]; then
+	PATH_BASED_ON_NICKNAME='/root/'
+		
+	if [[ "$SERVER_LETTER" == "a" ]]; then
+        PORT='10261'
+        SERVER='srv03'
+	elif [[ "$SERVER_LETTER" == "b" ]]; then
+        PORT='10333'
+        SERVER='srv04'
+	else 
+		echo -e "${COLOR_RED}Przestałem wypisywać, bo nie podałeś poprawnej literki serwera${COLOR_END}"
+		exit 1;
+	
+	fi
+#else
+#	echo -e "${COLOR_RED}Jakiś dziwny nick...${COLOR_END}"
+#	exit 1;
+fi
+
+
+
+if [[ -n "$DOWNLOAD" ]] && [[ -z "$UPLOAD" ]]; then
+    #rsync 
+	echo "-avh --progress -e \"ssh -p ${PORT} -i /root/.ssh/${DOWNLOAD}@${SERVER}\" ${DOWNLOAD}@${SERVER}.mikr.us:${PATH_BASED_ON_NICKNAME}${FILENAME} /root/"
+	echo -e "Pobieram z $COLOR_GREEN_LIGHT${DOWNLOAD}$COLOR_END$COLOR_RED_LIGHT@$COLOR_END$COLOR_ORANGE${SERVER}.mikr.us$COLOR_END$COLOR_RED_LIGHT:$COLOR_END$COLOR_BLUE_LIGHT${PATH_BASED_ON_NICKNAME}${FILENAME}$COLOR_END"
+
+elif [[ -n "$UPLOAD" ]] && [[ -z "$DOWNLOAD" ]]; then
+	#rsync 
+	echo "-avh --progress -e \"ssh -p ${PORT} -i /root/.ssh/${NICKNAME}@${SERVER}\" /root/${FILENAME} ${NICKNAME}@${SERVER}.mikr.us:${PATH_BASED_ON_NICKNAME}${FILENAME}"
+
+elif [[ -n "$UPLOAD" ]] && [[ -n "$DOWNLOAD" ]]; then
+	echo "Not, bro, not at one time..."
+	
+#else
+#	echo -e "${COLOR_RED}To się nie powinno wyświetlić${COLOR_END}"
+#	exit 1;
+fi
+
+#if [[ -z "$UPLOAD" ]] && [[ -z "$DOWNLOAD" ]] && [[ -z "$HELP" ]] && [[ -z $FILENAME ]] && [[ "$ARGSCOUNT" == 0 ]]; then
+	
+#fi
