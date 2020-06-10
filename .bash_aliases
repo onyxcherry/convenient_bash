@@ -9,3 +9,5 @@ alias ports='netstat -tulanp'
 alias l.='ls -d .* --color=auto'
 
 alias ipe='curl ipinfo.io/ip'
+
+alias jsonf="python -m json.tool"
