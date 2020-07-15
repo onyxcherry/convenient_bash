@@ -7,16 +7,26 @@ OPTIND=''
 OPTARG=''
 
 print_help() {
-  printf "Help module: ..."
+printf "\e[1;31mHugo managing script.\e[0m
+\e[1;33mPass basic directory:\e[0m
+a - arduino
+o - onyxcherry
+r - robot
+\e[1;33mPass location:\e[0m
+i - static/img
+p - content/posts
+\e[1;96mPass -n with name
+to create a post\e[0m
+"
 }
 
 while getopts 'aion:pr' flag; do
 
   case "${flag}" in
-  
+
     a) DIR='arduino.onyxcherry.pl' ;;
     i) WH='static/img' ;;
-	n) POST_NAME=${OPTARG} ;;
+    n) POST_NAME=${OPTARG} ;;
     p) WH='content/posts' ;;
     o) DIR='onyxcherry.pl' ;;
     r) DIR='robot.onyxcherry.pl' ;;
@@ -25,14 +35,14 @@ while getopts 'aion:pr' flag; do
   esac
 done
 
-if [[ -n $POST_NAME ]]; then
-	hugo new posts/${DATE}/${POST_NAME}
+if [[ -n $POST_NAME ]] && [[ -z $WH ]] && [[ -z $DIR ]]; then
+        hugo new posts/${DATE}/${POST_NAME}
 fi
 
-# dodać moduły sprawdzające - na wypadek pomyłki
-
-if [[ -n $WH ]]; then
-	cd /home/tomasz/${DIR}/${WH}/${DATE}/
-elif [[ -z $WH ]]; then
-	cd /home/tomasz/${DIR}/
+if [[ -n $WH ]] && [[ -n $DIR ]] ; then
+        cd /home/tomasz/${DIR}/${WH}/${DATE}/
+elif [[ -z $WH ]] && [[ -n $DIR ]];then
+        cd /home/tomasz/${DIR}/
+elif [[ -z $POST_NAME ]];then
+    print_help
 fi
