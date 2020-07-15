@@ -31,7 +31,7 @@ while getopts 'aion:pr' flag; do
     o) DIR='onyxcherry.pl' ;;
     r) DIR='robot.onyxcherry.pl' ;;
     *) print_help
-       exit 1 ;;
+       return 0 ;;
   esac
 done
 
