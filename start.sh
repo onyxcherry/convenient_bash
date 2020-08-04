@@ -106,3 +106,6 @@ chmod +x backup.sh
 
 # Add it to cron:
 # 00 04 * * * /bin/sh  /root/backup.sh
+
+#
+echo "PROMPT_COMMAND='history -a; history -n'" >> $HOME/.bashrc
