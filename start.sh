@@ -44,10 +44,10 @@ source $HOME/.bashrc
 #Install 2FA
 apt install libpam-google-authenticator && google-authenticator
 echo "auth [success=done default=ignore] pam_succeed_if.so user ingroup without-otp" >> /etc/pam.d/sshd 
-echo "auth requigroured pam_google_authenticator.so" >> /etc/pam.d/sshd
+echo "auth required pam_google_authenticator.so" >> /etc/pam.d/sshd
 # DO NOT CHANGE THE SEQUENCE OF ABOVE LINES
 sed -i 's/UsePAM no/UsePAM yes/' /etc/ssh/sshd_config
-sed -i 's/\(ChallengeResponseAuthentication\) yes/\1 no/g' /etc/ssh/sshd_config
+sed -i 's/\(ChallengeResponseAuthentication\) no/\1 yes/g' /etc/ssh/sshd_config
 systemctl restart sshd.service
 
 groupadd without-otp
