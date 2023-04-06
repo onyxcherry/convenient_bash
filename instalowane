@@ -1,0 +1,22 @@
+binwalk foremost socat
+
+rdiff-backup sqlite3
+
+tesseract-ocr tesseract-ocr-pol
+
+g++ make flex bison libssl-dev libelf-dev valgrind
+
+curl git rsync htop mc ranger httpie vim ncdu nginx tree p7zip-full acl vnstat
+whois shellcheck zstd jq ocrmypdf unoconv ffmpeg
+
+apt-transport-https ca-certificates certbot 
+ 
+python3.9 python3-pip python3-dev  python3-setuptools  python3-distutils python3.10-venv
+
+asciinema musikcube faketime 
+
+cloudflared # https://github.com/cloudflare/cloudflared
+
+dive # https://github.com/wagoodman/dive
+
+delta # https://github.com/dandavison/delta
