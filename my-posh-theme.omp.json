@@ -1,0 +1,141 @@
+{
+    "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+    "blocks": [
+        {
+            "alignment": "left",
+            "segments": [
+                {
+                    "background": "#0C212F",
+                    "foreground": "#FFFFFF",
+                    "leading_diamond": "\ue0b6",
+                    "style": "diamond",
+                    "template": "{{ .Icon }} {{ .UserName }}{{if .Root}} \u26a1{{end}}",
+                    "trailing_diamond": "\ue0b0",
+                    "type": "os"
+                },
+                {
+                    "type": "session",
+                    "style": "diamond",
+                    "powerline_symbol": "\ue0b0",
+                    "trailing_diamond": "\ue0b0",
+                    "leading_diamond": "<transparent,#c386f1>\ue0b0</>",
+                    "foreground": "#282828",
+                    "background": "#c386f1",
+                    "template": "{{ if .SSHSession }} \uF817{{ .HostName }}{{ end }}"
+                },
+                {
+                    "background": "#DE2121",
+                    "foreground": "#FFFFFF",
+                    "leading_diamond": "<transparent,#DE2121>\ue0b0</>",
+                    "style": "diamond",
+                    "template": " \uf0e7 ",
+                    "trailing_diamond": "\ue0b0",
+                    "type": "root"
+                },
+                {
+                    "background": "#26BDBB",
+                    "foreground": "#282828",
+                    "powerline_symbol": "\ue0b0",
+                    "properties": {
+                        "style": "full"
+                    },
+                    "style": "powerline",
+                    "template": " {{ .Path }} ",
+                    "type": "path"
+                },
+                {
+                    "background": "#98971A",
+                    "background_templates": [
+                        "{{ if or (.Working.Changed) (.Staging.Changed) }}#FF9248{{ end }}",
+                        "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#ff4500{{ end }}",
+                        "{{ if gt .Ahead 0 }}#B388FF{{ end }}",
+                        "{{ if gt .Behind 0 }}#B388FF{{ end }}"
+                    ],
+                    "foreground": "#282828",
+                    "leading_diamond": "\ue0b6",
+                    "powerline_symbol": "\ue0b0",
+                    "properties": {
+                        "branch_max_length": 25,
+                        "fetch_status": true,
+                        "branch_icon": "\uE0A0 ",
+                        "branch_identical_icon": "\u25CF"
+                    },
+                    "style": "powerline",
+                    "template": " {{ .HEAD }}{{ .BranchStatus }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }} ",
+                    "trailing_diamond": "\ue0b4",
+                    "type": "git"
+                },
+                {
+                    "background": "#8ED1F7",
+                    "foreground": "#111111",
+                    "powerline_symbol": "\ue0b0",
+                    "properties": {
+                        "fetch_version": true
+                    },
+                    "style": "powerline",
+                    "template": " \ue626 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+                    "type": "go"
+                },
+                {
+                    "background": "#86BBD8",
+                    "foreground": "#111111",
+                    "powerline_symbol": "\ue0b0",
+                    "style": "powerline",
+                    "template": " \ue718 {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }} ",
+                    "type": "node"
+                },
+                {
+                    "background": "#FFDE57",
+                    "foreground": "#111111",
+                    "powerline_symbol": "\ue0b0",
+                    "properties": {
+                        "display_mode": "environment",
+                        "fetch_virtual_env": true,
+                        "fetch_version": true
+                    },
+                    "style": "powerline",
+                    "template": " \ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+                    "type": "python"
+                },
+                {
+                    "background": "#AE1401",
+                    "foreground": "#ffffff",
+                    "powerline_symbol": "\ue0b0",
+                    "properties": {
+                        "display_mode": "files",
+                        "fetch_version": true
+                    },
+                    "style": "powerline",
+                    "template": " \ue791 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+                    "type": "ruby"
+                },
+                {
+                    "type": "executiontime",
+                    "style": "diamond",
+                    "leading_diamond": "<transparent,background>\ue0b0</>",
+                    "trailing_diamond": "\ue0b0",
+                    "foreground": "#ffffff",
+                    "background": "#8800dd",
+                    "template": " <#fefefe>\ufbab</> {{ .FormattedMs }} ",
+                    "properties": {
+                        "threshold": 500,
+                        "style": "austin"
+                    }
+                },
+                {
+                    "background": "#910000",
+                    "foreground": "#ffffff",
+                    "leading_diamond": "<transparent,background>\ue0b0</>",
+                    "style": "diamond",
+                    "template": "<transparent> \uf12a</> {{ .Meaning }} ",
+                    "trailing_diamond": "\ue0b0",
+                    "type": "exit"
+                }
+            ],
+            "type": "prompt"
+        }
+    ],
+    "console_title_template": "{{if .Root}} \u26a1 {{end}}{{.Folder | replace \"~\" \"🏠\"}} @ {{.HostName}}",
+    "final_space": true,
+    "version": 2
+}
