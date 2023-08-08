@@ -4,26 +4,28 @@ alias ....='cd ../../../'
 alias .4='cd ../../../'
 alias .5='cd ../../../../'
 
-alias ports='netstat -tulanp'
+alias ports='ss -tulanp'
 
 alias l.='ls -d .* --color=auto'
+alias lt='ls --human-readable --size -1 -S --classify'
 
 alias ipe='curl ipinfo.io/ip; echo'
 
 alias jsonf="python -m json.tool"
 
 alias gs="git status"
+alias gt='cd `git rev-parse --show-toplevel`'
 
 alias policz='du -m --max-depth 1 | sort -n'
 
-alias python='python3.11'
 alias python3='python3.11'
+alias s="source ./venv/bin/activate"
 
 alias losuj="python -c 'from os import urandom; from base64 import b64encode; print(b64encode(urandom(32)).decode(\"utf-8\"))'"
 
 alias raport='coverage html --omit "venv/*,tests/*"'
 
-alias wszystko='git log --branches --remotes --tags --graph --oneline --decorate'
+alias {wsz,wszystko}='git log --branches --remotes --tags --graph --oneline --decorate'
 
 alias glcicd='gitlab-runner exec docker --cache-dir=/tmp/gitlab-cache --docker-cache-dir=/tmp/gitlab-cache --docker-volumes=/tmp/gitlab-cache'
 
@@ -46,3 +48,6 @@ function doprzodu() {
 }
 
 alias zapisz_strone='wget --no-clobber --convert-links --random-wait -p -E -e robots=off --no-parent -U mozilla'
+
+alias k='kubectl'
+alias ka='kubectl apply -f'
