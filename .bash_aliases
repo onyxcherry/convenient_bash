@@ -18,7 +18,7 @@ alias gt='cd `git rev-parse --show-toplevel`'
 
 alias policz='du -m --max-depth 1 | sort -n'
 
-alias python3='python3.11'
+alias python3='python3.10'
 alias s="source ./venv/bin/activate"
 
 alias losuj="python -c 'from os import urandom; from base64 import b64encode; print(b64encode(urandom(32)).decode(\"utf-8\"))'"
@@ -26,6 +26,7 @@ alias losuj="python -c 'from os import urandom; from base64 import b64encode; pr
 alias raport='coverage html --omit "venv/*,tests/*"'
 
 alias {wsz,wszystko}='git log --branches --remotes --tags --graph --oneline --decorate'
+alias zguba='git log --oneline --all --graph'
 
 alias glcicd='gitlab-runner exec docker --cache-dir=/tmp/gitlab-cache --docker-cache-dir=/tmp/gitlab-cache --docker-volumes=/tmp/gitlab-cache'
 
@@ -51,3 +52,6 @@ alias zapisz_strone='wget --no-clobber --convert-links --random-wait -p -E -e ro
 
 alias k='kubectl'
 alias ka='kubectl apply -f'
+alias kp='kubectl get pods'
+alias ktory='kubectl get pod -o=custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName'
+alias kcurl='kubectl run mycurlpod --image=curlimages/curl -i --tty -- sh'
