@@ -21,7 +21,7 @@ alias policz='du -m --max-depth 1 | sort -n'
 alias python3='python3.10'
 alias s="source ./venv/bin/activate"
 
-alias losuj="python -c 'from os import urandom; from base64 import b64encode; print(b64encode(urandom(32)).decode(\"utf-8\"))'"
+alias secret='python3 -c "import secrets; print(secrets.token_urlsafe(32))"'
 
 alias raport='coverage html --omit "venv/*,tests/*"'
 
@@ -53,5 +53,6 @@ alias zapisz_strone='wget --no-clobber --convert-links --random-wait -p -E -e ro
 alias k='kubectl'
 alias ka='kubectl apply -f'
 alias kp='kubectl get pods'
+alias kd='KUBECTL_EXTERNAL_DIFF="colordiff -N -u" kubectl diff'
 alias ktory='kubectl get pod -o=custom-columns=NAME:.metadata.name,STATUS:.status.phase,NODE:.spec.nodeName'
 alias kcurl='kubectl run mycurlpod --image=curlimages/curl -i --tty -- sh'
