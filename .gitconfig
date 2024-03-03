@@ -5,6 +5,7 @@
 	defaultBranch = main
 [diff]
 	colorMoved = true
+	colorMovedWS = allow-indentation-change
 [core]
 	editor = vim
     pager = delta
@@ -19,5 +20,15 @@
     light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 
 [merge]
-    conflictstyle = diff3
+    conflictstyle = zdiff3
 
+[rerere]
+	enabled = true
+[blame]
+	ignoreRevsFile = .git-blame-ignore-revs
+[branch]
+	sort = -committerdate
+[tag]
+	sort = -taggerdate
+[log]
+	date = iso
